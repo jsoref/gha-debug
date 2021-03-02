@@ -1,0 +1,27 @@
+name: Debug
+on: push
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        include:
+        - os: macos-latest
+          LIST_SERVICES: sudo launchctl list
+
+        - os: ubuntu-latest
+          LIST_SERVICES: systemctl -l --no-pager
+
+        - os: windows-latest
+          LIST_SERVICES: sc queryex type=service state=all
+
+    steps:
+    - name: Event
+      shell: bash
+      run: cat $GITHUB_EVENT_PATH
+    - name: Show environment
+      shell: bash
+      run: env
+    - name: List services
+      run: ${{ matrix.LIST_SERVICES }}
