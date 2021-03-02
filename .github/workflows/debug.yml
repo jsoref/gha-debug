@@ -5,16 +5,23 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-18.04, ubuntu-20.04, windows-latest]
         include:
         - os: macos-latest
           LIST_SERVICES: sudo launchctl list
+          LIST_PORTS: sudo lsof -iTCP -n -P | sort -k1
 
-        - os: ubuntu-latest
+        - os: ubuntu-18.04
           LIST_SERVICES: systemctl -l --no-pager
+          LIST_PORTS: sudo lsof -iTCP -n -P | sort -k1
+
+        - os: ubuntu-20.04
+          LIST_SERVICES: systemctl -l --no-pager
+          LIST_PORTS: sudo lsof -iTCP -n -P | sort -k1
 
         - os: windows-latest
           LIST_SERVICES: sc queryex type=service state=all
+          LIST_PORTS: Get-NetTCPConnection | Select LocalAddress, LocalPort, OwningProcess, @{N='Path';E={(Get-Process -PID $_.OwningProcess).Path}} | Sort OwningProcess
 
     steps:
     - name: Event
@@ -25,3 +32,5 @@ jobs:
       run: env
     - name: List services
       run: ${{ matrix.LIST_SERVICES }}
+    - name: List ports
+      run: ${{ matrix.LIST_PORTS }}
