@@ -7,16 +7,12 @@ branding:
 runs:
   using: 'composite'
   steps:
-    - name: Event
-      run: >
-        cat $GITHUB_EVENT_PATH
+    - name: Env
       shell: bash
-    - name: Show environment
       run: env
+    - name: Look
       shell: bash
-    - name: List services
-      run: systemctl -l --no-pager
+      run: find $GITHUB_ACTION_PATH || echo 'wah!'
+    - name: Go
       shell: bash
-    - name: List ports
-      run: sudo lsof -iTCP -n -P | sort -k1
-      shell: bash
+      run: echo "go to '$GITHUB_ACTION_PATH' or '${{ github.action_path }}'"; (cd "${{ github.action_path }}" && echo "am in $(pwd) via github.action_path") || (cd $GITHUB_ACTION_PATH && echo "am in $(pwd) via GITHUB_ACTION_PATH") || echo "oops could not go to '$GITHUB_ACTION_PATH' nor '${{ github.action_path }}'"
