@@ -1,0 +1,22 @@
+name: 'GHA Debug'
+description: 'Debug github actions'
+author: 'jsoref'
+branding:
+  icon: 'activity'
+  color: 'orange'
+runs:
+  using: 'composite'
+  steps:
+    - name: Event
+      run: >
+        cat $GITHUB_EVENT_PATH
+      shell: bash
+    - name: Show environment
+      run: env
+      shell: bash
+    - name: List services
+      run: systemctl -l --no-pager
+      shell: bash
+    - name: List ports
+      run: sudo lsof -iTCP -n -P | sort -k1
+      shell: bash
