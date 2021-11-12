@@ -39,4 +39,4 @@ jobs:
       run: ls -l /var/run/ || true
     - name: List groups
       shell: bash
-      run: cat /etc/groups || true
+      run: cat /etc/group || true; id
