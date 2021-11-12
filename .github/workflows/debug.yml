@@ -34,3 +34,6 @@ jobs:
       run: ${{ matrix.LIST_SERVICES }}
     - name: List ports
       run: ${{ matrix.LIST_PORTS }}
+    - name: List /var/run
+      shell: bash
+      run: ls -l /var/run || true
