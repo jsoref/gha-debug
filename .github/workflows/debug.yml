@@ -37,3 +37,6 @@ jobs:
     - name: List /var/run
       shell: bash
       run: ls -l /var/run/ || true
+    - name: List groups
+      shell: bash
+      run: cat /etc/groups || true
